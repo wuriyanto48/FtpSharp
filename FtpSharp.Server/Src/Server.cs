@@ -8,11 +8,11 @@ namespace FtpSharp.Server
 {
     public class Server : IDisposable
     {
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public static ManualResetEvent acceptDone = new ManualResetEvent(false);
 
-        public static ManualResetEvent sendDone = new ManualResetEvent(false);
+        // public static ManualResetEvent sendDone = new ManualResetEvent(false);
 
-        public static ManualResetEvent receiveDone = new ManualResetEvent(false);
+        // public static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
         private Socket _listener = null;
         private readonly string _address;
@@ -66,13 +66,13 @@ namespace FtpSharp.Server
                 while (_isRunning)
                 {
                     // Set the event to nonsignaled state.  
-                    allDone.Reset();
+                    acceptDone.Reset();
 
                     Console.WriteLine("waiting client connection...");
 
                     _listener.BeginAccept(new AsyncCallback(AcceptCallback), _listener);
 
-                    allDone.WaitOne();
+                    acceptDone.WaitOne();
 
                 }
 
@@ -95,7 +95,7 @@ namespace FtpSharp.Server
                 Socket socketClient = listener.EndAccept(ar);
 
                 // send signal to thread
-                allDone.Set();
+                acceptDone.Set();
 
                 ClientObject clientObject = new ClientObject(socketClient);
 

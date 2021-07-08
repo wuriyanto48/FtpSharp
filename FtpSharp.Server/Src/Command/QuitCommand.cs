@@ -14,7 +14,7 @@ namespace FtpSharp.Server.Command
 
         public void Process(string[] args)
         {
-            byte[] data = MessageUtil.SendReply(_clientObject, 221);
+            byte[] data = MessageUtil.BuildReply(_clientObject, 221);
             _clientObject.SendMessage(data);
             _clientObject._clientSocket.Shutdown(SocketShutdown.Both);  
             _clientObject._clientSocket.Close();

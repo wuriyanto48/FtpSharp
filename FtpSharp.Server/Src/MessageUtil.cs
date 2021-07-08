@@ -20,9 +20,17 @@ namespace FtpSharp.Server
                     return NewLine;
             }
         }
-        public static byte[] SendReply(ClientObject clientObject, int code)
+        public static byte[] BuildReply(ClientObject clientObject, int code)
         {
             string reply = Reply.GetReply(code);
+            byte[] byteData = Encoding.ASCII.GetBytes(reply);
+            byteData = byteData.Concatenate(EOL(clientObject.dataType));
+            return byteData;
+        }
+
+        public static byte[] BuildReply(ClientObject clientObject, int code, string message)
+        {
+            string reply = String.Format($"{code} {message}");
             byte[] byteData = Encoding.ASCII.GetBytes(reply);
             byteData = byteData.Concatenate(EOL(clientObject.dataType));
             return byteData;

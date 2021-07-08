@@ -33,7 +33,7 @@ namespace FtpSharp.Server.Command
             Console.WriteLine("client send CWD command");
             Console.WriteLine($"{String.Join(",", args)}");
             
-            byte[] data = MessageUtil.SendReply(_clientObject, 200);
+            byte[] data = MessageUtil.BuildReply(_clientObject, 200);
 
             _clientObject.SendMessage(data);
         }

@@ -21,21 +21,29 @@ namespace FtpSharp.Server
 
         public DataType dataType;
 
-        private Commands commands;
+        public Socket dataConn;
+
+        private Command.Commands commands;
 
         public ClientObject(Socket clientSocket)
         {
             _clientSocket = clientSocket;
             dataType = DataType.DEFAULT;
 
-            commands = new Commands(this);
+            commands = new Command.Commands(this);
             WorkDir = "/";
         }
 
         public void SendInitialMessage()
         {
-            byte[] byteData = MessageUtil.SendReply(this, 220);
+            byte[] byteData = MessageUtil.BuildReply(this, 220);
             _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
+                new AsyncCallback(SendCallback), this);
+        }
+
+        public void SendMessage(byte[] data)
+        {
+            _clientSocket.BeginSend(data, 0, data.Length, 0, 
                 new AsyncCallback(SendCallback), this);
         }
 
@@ -70,7 +78,7 @@ namespace FtpSharp.Server
                 // Check for end-of-file tag. If it is not there, read
                 // more data.  
                 content = state.sb.ToString();
-                Console.WriteLine($"content {content}");
+                Console.WriteLine($"content {content.Equals("QUIT\r\n")}");
                 Console.WriteLine($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
                 if (content.IndexOf("\n") > -1 || content.IndexOf("\r\n") > -1) {
                     // All the data has been read from the
@@ -99,19 +107,19 @@ namespace FtpSharp.Server
 
             string command = messageParts[0];
             string[] args = messageParts.Slice(1, messageParts.Length);
-            var isValidCommand = Enum.TryParse(typeof(ECommand), command, false, out var eCommand);
+            var isValidCommand = Enum.TryParse(typeof(Command.ECommand), command, false, out var eCommand);
             if (!isValidCommand)
             {
-                var ftpCommand = commands.GetCommand(ECommand.NOTVALID);
-                byte[] byteData = ftpCommand.Process(null);
-                _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
-                    new AsyncCallback(SendCallback), state);
+                var ftpCommand = commands.GetCommand(Command.ECommand.NOTVALID);
+                ftpCommand.Process(null);
+                // _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
+                //     new AsyncCallback(SendCallback), state);
             } else 
             {
-                var ftpCommand = commands.GetCommand((ECommand) eCommand);
-                byte[] byteData = ftpCommand.Process(args);
-                _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
-                    new AsyncCallback(SendCallback), state);
+                var ftpCommand = commands.GetCommand((Command.ECommand) eCommand);
+                ftpCommand.Process(args);
+                // _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
+                //     new AsyncCallback(SendCallback), state);
             }
             // sendDone.WaitOne();
         }
@@ -129,20 +137,24 @@ namespace FtpSharp.Server
                 // sendDone.Set(); 
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent); 
 
-                if (data.Equals("QUIT\n"))
-                {
-                    byte[] byteData = MessageUtil.SendReply(this, 221);
-                    clientSocket.Send(byteData);
-                    
-                    clientSocket.Shutdown(SocketShutdown.Both);  
-                    clientSocket.Close();
-                } else
-                {
-                    ClientObject newState = new ClientObject(clientSocket);
+                ClientObject newState = new ClientObject(clientSocket);
 
-                    clientSocket.BeginReceive(newState.Buffer, 0, ClientObject.BufferSize, 0,  
-                            new AsyncCallback(ReadCallback), newState);
-                }
+                clientSocket.BeginReceive(newState.Buffer, 0, ClientObject.BufferSize, 0,  
+                        new AsyncCallback(ReadCallback), newState);
+
+                // TODO
+                // if (data.Equals("QUIT\r\n"))
+                // {   
+                //     Console.WriteLine("closing connection....");
+                //     clientSocket.Shutdown(SocketShutdown.Both);  
+                //     clientSocket.Close();
+                // } else
+                // {
+                //     ClientObject newState = new ClientObject(clientSocket);
+
+                //     clientSocket.BeginReceive(newState.Buffer, 0, ClientObject.BufferSize, 0,  
+                //             new AsyncCallback(ReadCallback), newState);
+                // }
 
             } catch (Exception e)
             {

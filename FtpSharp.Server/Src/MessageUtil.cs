@@ -5,19 +5,19 @@ namespace FtpSharp.Server
 {
     public static class MessageUtil
     {
-        public static readonly byte[] CarriageReturn = new byte[] {13, 10};
-        public static readonly byte[] NewLine = new byte[] {10};
+        public static readonly byte[] CRLF = new byte[] {13, 10};
+        public static readonly byte[] LF = new byte[] {10};
 
         public static byte[] EOL(DataType dataType)
         {
             switch (dataType)
             {
                 case DataType.ASCII:
-                    return CarriageReturn;
+                    return CRLF;
                 case DataType.BINARY:
-                    return NewLine;
+                    return LF;
                 default:
-                    return NewLine;
+                    return LF;
             }
         }
         public static byte[] BuildReply(ClientObject clientObject, int code)

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+using System.IO;
 
 namespace FtpSharp.Server
 {
@@ -9,8 +7,9 @@ namespace FtpSharp.Server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(ECommand.ABOR.ToString());
-            using var server = new Server("localhost", 8777);
+            var rootDir = Path.GetFullPath("public");
+            
+            using var server = new Server("localhost", 8777, rootDir);
             server.Bind();
             server.Start();
         }

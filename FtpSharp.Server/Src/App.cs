@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace FtpSharp.Server
 {
@@ -7,9 +6,25 @@ namespace FtpSharp.Server
     {
         static void Main(string[] args)
         {
-            var rootDir = Path.GetFullPath("public");
+
+            if (args.Length <= 0)
+            {
+                Console.WriteLine("required config file");
+                Environment.Exit(-1);
+            }
+
+            Config config = null;
+
+            try
+            {
+                config = Config.FromFile(args[0]);
+            } catch (Exception e)
+            {
+                Console.WriteLine($"error opening config file {e.Message}");
+                Environment.Exit(-1);
+            }
             
-            using var server = new Server("localhost", 8777, rootDir);
+            using var server = new Server(config);
             server.Bind();
             server.Start();
         }

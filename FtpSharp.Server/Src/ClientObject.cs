@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace FtpSharp.Server
 {
-    public class ClientObject
+    public sealed class ClientObject
     {
         public const int BufferSize = 1024;
 

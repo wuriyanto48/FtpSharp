@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace FtpSharp.Server.Command
 {
 
-    public class Commands
+    public sealed class Commands
     {
         private Dictionary<ECommand, ICommand> commands = new Dictionary<ECommand, ICommand>();
 

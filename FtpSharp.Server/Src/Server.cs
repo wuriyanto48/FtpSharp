@@ -2,11 +2,12 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.IO;
 using System.Threading;
 
 namespace FtpSharp.Server 
 {
-    public class Server : IDisposable
+    public sealed class Server : IDisposable
     {
         public static ManualResetEvent acceptDone = new ManualResetEvent(false);
 
@@ -15,19 +16,17 @@ namespace FtpSharp.Server
         // public static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
         private Socket _listener = null;
-        private readonly string _address;
-        private readonly int _port;
+
+        private Config _config;
 
         private string _rootDir;
 
         public static bool _isRunning = true;
 
-        public Server(string address, int port, string rootDir)
+        public Server(Config config)
         {
-            _address = address;
-            _port = port;
-
-            _rootDir = rootDir;
+            _config = config;
+            _rootDir = Path.GetFullPath(_config.RootDir);
             Reply.InitReply();
         }
 
@@ -42,9 +41,9 @@ namespace FtpSharp.Server
 
         public void Bind()
         {
-            IPHostEntry iPHostEntry = Dns.GetHostEntry(_address);
+            IPHostEntry iPHostEntry = Dns.GetHostEntry(_config.Address);
             IPAddress ipAddress = iPHostEntry.AddressList[0];
-            IPEndPoint iPEndPoint = new IPEndPoint(ipAddress, _port);
+            IPEndPoint iPEndPoint = new IPEndPoint(ipAddress, _config.Port);
 
             _listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 

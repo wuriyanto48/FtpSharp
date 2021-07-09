@@ -1,5 +1,8 @@
 {
     "address": "localhost",
     "port": 8777,
-    "rootDir": "public"
+    "rootDir": "public",
+    "secret": "secret$##11",
+    "serverUsername": "ftp-user",
+    "serverPassword": "ftp-pass"
 }

@@ -1,8 +1,10 @@
-# FTP Sharp 
+# FTP Sharp (FTP Server)
+
+## an experimental FTP Server written `from scratch` in `C#`. 
+
 
 > status: on going
 
-an experimental FTP Server written `from scratch` in `C#`. 
 
 Based on Spec https://datatracker.ietf.org/doc/html/rfc959
 
@@ -23,6 +25,12 @@ Make sure to add `config.json` param
 
 ```shell
 $ dotnet app/FtpSharp.Server.dll config.json
+```
+
+### Test with FTP Client
+
+```shell
+$ ftp localhost 8777
 ```
 
 #

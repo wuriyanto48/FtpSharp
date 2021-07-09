@@ -37,7 +37,7 @@ namespace FtpSharp.Server.Command
             
             byte[] data = MessageUtil.BuildReply(_clientObject, 200);
 
-            _clientObject.SendMessage(data);
+            _clientObject.Write(data);
         }
     }
 }

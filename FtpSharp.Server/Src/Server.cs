@@ -106,7 +106,7 @@ namespace FtpSharp.Server
 
                 clientObject.Auth = _auth;
 
-                clientObject.SendInitialMessage();
+                clientObject.WriteInitialMessage();
                 
                 clientObject.ProcessMessage();
                 

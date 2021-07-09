@@ -16,7 +16,7 @@ namespace FtpSharp.Server.Command
         {
             var currentDirectory = Path.Join(_clientObject.RootDir, _clientObject.WorkDir);
             byte[] data = MessageUtil.BuildReply(_clientObject, 257, $"\"{currentDirectory}\"");
-            _clientObject.SendMessage(data);
+            _clientObject.Write(data);
         }
     }
 }

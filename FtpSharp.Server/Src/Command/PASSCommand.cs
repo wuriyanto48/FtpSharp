@@ -21,14 +21,14 @@ namespace FtpSharp.Server.Command
             if (!validAuth)
             {
                 byte[] invalidData = MessageUtil.BuildReply(_clientObject, 530, "Login Error, Invalid username or password");
-                _clientObject.SendMessage(invalidData);
+                _clientObject.Write(invalidData);
                 return;
             }
 
             _clientObject.Username = _clientObject.ReqUsername;
             _clientObject.ReqUsername = "";
             byte[] data = MessageUtil.BuildReply(_clientObject, 230, "Login OK");
-            _clientObject.SendMessage(data);
+            _clientObject.Write(data);
         }
     }
 }

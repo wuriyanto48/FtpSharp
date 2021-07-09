@@ -40,14 +40,14 @@ namespace FtpSharp.Server
             WorkDir = "/";
         }
 
-        public void SendInitialMessage()
+        public void WriteInitialMessage()
         {
             byte[] byteData = MessageUtil.BuildReply(this, 220);
             _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
                 new AsyncCallback(SendCallback), this);
         }
 
-        public void SendMessage(byte[] data)
+        public void Write(byte[] data)
         {
             _clientSocket.BeginSend(data, 0, data.Length, 0, 
                 new AsyncCallback(SendCallback), this);

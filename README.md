@@ -1,6 +1,6 @@
 # FTP Sharp (FTP Server)
 
-## an experimental FTP Server written `from scratch` in `C#`. 
+## An experimental FTP Server written `from scratch` in `C#`. 
 
 
 > status: on going

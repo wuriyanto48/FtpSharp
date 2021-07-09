@@ -21,5 +21,10 @@ namespace FtpSharp.Server.Command
             byte[] data = MessageUtil.BuildReply(_clientObject, 331);
             _clientObject.Write(data);
         }
+
+        public bool ShouldLogin()
+        {
+            return false;
+        }
     }
 }

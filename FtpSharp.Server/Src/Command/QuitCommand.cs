@@ -19,5 +19,10 @@ namespace FtpSharp.Server.Command
             _clientObject._clientSocket.Shutdown(SocketShutdown.Both);  
             _clientObject._clientSocket.Close();
         }
+
+        public bool ShouldLogin()
+        {
+            return false;
+        }
     }
 }

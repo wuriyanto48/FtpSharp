@@ -40,6 +40,23 @@ namespace FtpSharp.Server
             WorkDir = "/";
         }
 
+        public bool IsLogin()
+        {
+            return !String.IsNullOrEmpty(Username);
+        }
+
+        // Checks if the socket is connected
+        static bool IsSocketConnected(Socket s)
+        {
+            try
+            {
+                return !((s.Poll(1000, SelectMode.SelectRead) && (s.Available == 0)) || !s.Connected);
+            } catch
+            {
+                return false;
+            }
+        }
+
         public void WriteInitialMessage()
         {
             byte[] byteData = MessageUtil.BuildReply(this, 220);
@@ -63,18 +80,23 @@ namespace FtpSharp.Server
         public void ReadCallback(IAsyncResult ar)
         {
 
-            String content = String.Empty;
-    
             // Retrieve the state object and the handler socket  
             // from the asynchronous state object.  
             ClientObject state = (ClientObject) ar.AsyncState;  
-            Socket clientSocket = state._clientSocket;  
+            Socket clientSocket = state._clientSocket;
+
+            // check and return from read callback
+            if (!IsSocketConnected(clientSocket))
+            {
+                return;
+            } 
     
             // Read data from the client socket.
             int bytesRead = clientSocket.EndReceive(ar);  
             Console.WriteLine($"bytesRead {bytesRead}");
 
             // receiveDone.Set();
+            String content = String.Empty;
     
             if (bytesRead > 0) {  
                 // There  might be more data, so store the data received so far.  
@@ -99,10 +121,7 @@ namespace FtpSharp.Server
                     clientSocket.BeginReceive(state.Buffer, 0, ClientObject.BufferSize, 0,  
                         new AsyncCallback(ReadCallback), state);
                 }
-            } else 
-            {
-                clientSocket.Close();
-            }  
+            } 
         }
 
         private void Send(ClientObject state)
@@ -118,14 +137,17 @@ namespace FtpSharp.Server
             {
                 var ftpCommand = commands.GetCommand(Command.ECommand.NOTVALID);
                 ftpCommand.Process(null);
-                // _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
-                //     new AsyncCallback(SendCallback), state);
             } else 
             {
                 var ftpCommand = commands.GetCommand((Command.ECommand) eCommand);
-                ftpCommand.Process(args);
-                // _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
-                //     new AsyncCallback(SendCallback), state);
+                if (ftpCommand.ShouldLogin() && !IsLogin())
+                {
+                    byte[] notLoginData = MessageUtil.BuildReply(this, 530);
+                    Write(notLoginData);
+                } else 
+                {
+                    ftpCommand.Process(args);
+                }
             }
             // sendDone.WaitOne();
         }

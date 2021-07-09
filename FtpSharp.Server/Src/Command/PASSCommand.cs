@@ -30,5 +30,10 @@ namespace FtpSharp.Server.Command
             byte[] data = MessageUtil.BuildReply(_clientObject, 230, "Login OK");
             _clientObject.Write(data);
         }
+
+        public bool ShouldLogin()
+        {
+            return false;
+        }
     }
 }

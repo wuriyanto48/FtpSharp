@@ -39,5 +39,10 @@ namespace FtpSharp.Server.Command
 
             _clientObject.Write(data);
         }
+
+        public bool ShouldLogin()
+        {
+            return true;
+        }
     }
 }

@@ -32,6 +32,8 @@ namespace FtpSharp.Server.Command
 
             Console.WriteLine("client send CWD command");
             Console.WriteLine($"{String.Join(",", args)}");
+
+            _clientObject.WorkDir = workDir;
             
             byte[] data = MessageUtil.BuildReply(_clientObject, 200);
 

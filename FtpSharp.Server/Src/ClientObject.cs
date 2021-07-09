@@ -19,6 +19,12 @@ namespace FtpSharp.Server
 
         public string WorkDir { get; set; }
 
+        public string Username { get; set; }
+
+        public string ReqUsername { get; set; }
+
+        public Auth.IAuth Auth { get; set; }
+
         public DataType dataType;
 
         public Socket dataConn;

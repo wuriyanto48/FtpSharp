@@ -11,6 +11,7 @@ namespace FtpSharp.Server.Command
         public Commands(ClientObject clientObject)
         {
             commands.Add(ECommand.USER, new UserCommand(clientObject));
+            commands.Add(ECommand.PASS, new PASSCommand(clientObject));
             commands.Add(ECommand.CWD, new CWDCommand(clientObject));
             commands.Add(ECommand.PWD, new PWDCommand(clientObject));
             commands.Add(ECommand.QUIT, new QuitCommand(clientObject));

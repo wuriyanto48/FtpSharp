@@ -23,6 +23,8 @@ namespace FtpSharp.Server
                 Console.WriteLine($"error opening config file {e.Message}");
                 Environment.Exit(-1);
             }
+
+            Console.WriteLine(config);
             
             using var server = new Server(config);
             server.Bind();

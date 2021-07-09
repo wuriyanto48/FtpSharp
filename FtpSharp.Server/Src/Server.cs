@@ -21,12 +21,16 @@ namespace FtpSharp.Server
 
         private string _rootDir;
 
+        private Auth.IAuth _auth;
+
         public static bool _isRunning = true;
 
         public Server(Config config)
         {
             _config = config;
             _rootDir = Path.GetFullPath(_config.RootDir);
+
+            _auth = new Auth.DefaultAuth(config.Secret, config.ServerUsername, config.ServerPassword);
             Reply.InitReply();
         }
 
@@ -99,6 +103,8 @@ namespace FtpSharp.Server
                 ClientObject clientObject = new ClientObject(socketClient);
 
                 clientObject.RootDir = _rootDir;
+
+                clientObject.Auth = _auth;
 
                 clientObject.SendInitialMessage();
                 

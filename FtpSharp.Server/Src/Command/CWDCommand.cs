@@ -18,6 +18,9 @@ namespace FtpSharp.Server.Command
             var workDir = Path.Join(_clientObject.WorkDir, arg);
             var absolutePath = Path.Join(_clientObject.RootDir, workDir);
 
+            Console.WriteLine($"workDir: {Path.TrimEndingDirectorySeparator(workDir)}");
+            Console.WriteLine($"absolutePath: {absolutePath}");
+
             DirectoryInfo dir = new DirectoryInfo(absolutePath);
             if (!dir.Exists)
             {
@@ -33,12 +36,8 @@ namespace FtpSharp.Server.Command
             }
 
             Console.WriteLine($" dir.Exists: {dir.Exists}");
-            
-            Console.WriteLine($"workDir: {workDir}");
-            Console.WriteLine($"absolutePath: {absolutePath}");
 
             Console.WriteLine("client send CWD command");
-            Console.WriteLine($"{String.Join(",", args)}");
 
             _clientObject.WorkDir = workDir;
             

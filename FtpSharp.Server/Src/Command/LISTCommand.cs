@@ -41,7 +41,7 @@ namespace FtpSharp.Server.Command
             _clientObject.Write(openingConnData);
 
             string[] files = Directory.GetFileSystemEntries(targetPath);
-            var formatted = FormatFileInfo(files);
+            var formatted = FormatFileInfoSimple(files);
             var formattedBytes = Encoding.ASCII.GetBytes(formatted);
 
             if (_clientObject.DataConn.Client() != null)
@@ -64,12 +64,27 @@ namespace FtpSharp.Server.Command
             return true;
         }
 
+        private string FormatFileInfoSimple(string[] files)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach(var f in files)
+            {
+                var pathParts = f.Split("/");
+                var lastPath = pathParts[pathParts.Length - 1];
+                sb.Append(lastPath);
+                sb.Append("\r\n");
+            }
+
+            return sb.ToString();
+        }
+
         private string FormatFileInfo(string[] files)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("--------------- File Info ----------------");
             sb.Append("\r\n");
-            
+
             foreach(var f in files)
             {
                 var pathParts = f.Split("/");

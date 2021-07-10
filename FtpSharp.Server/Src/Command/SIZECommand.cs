@@ -23,10 +23,10 @@ namespace FtpSharp.Server.Command
             {
                 var arg = args[0];
                 arg = MessageUtil.TrimCRLF(arg);
-                targetPath = Path.Combine(_clientObject.RootDir, _clientObject.WorkDir, arg);
+                targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir, arg);
             } else
             {
-                targetPath = Path.Combine(_clientObject.RootDir, _clientObject.WorkDir);
+                targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir);
             }
 
             FileInfo fileInfo = new FileInfo(targetPath);

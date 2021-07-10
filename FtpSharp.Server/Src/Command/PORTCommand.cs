@@ -32,6 +32,20 @@ namespace FtpSharp.Server.Command
             Console.WriteLine($"host: {host}");
             Console.WriteLine($"port: {port}");
 
+            IDataConnection dataConn = null;
+            try
+            {
+                dataConn = new DefaultDataConnection(host, port);
+            } catch (Exception e)
+            {
+                Console.WriteLine($"**************** {e.Message}");
+                byte[] invalidAddressFamilyData = MessageUtil.BuildReply(_clientObject, 425);
+                _clientObject.Write(invalidAddressFamilyData);
+                return;
+            }
+
+            _clientObject.DataConn = dataConn;
+
             byte[] data = MessageUtil.BuildReply(_clientObject, 200, "Connection estabilished");
             _clientObject.Write(data);
         }

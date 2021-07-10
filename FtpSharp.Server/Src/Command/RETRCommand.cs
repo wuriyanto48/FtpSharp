@@ -63,24 +63,5 @@ namespace FtpSharp.Server.Command
             return true;
         }
 
-        private string FormatFileInfo(string[] files)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("--------------- File Info ----------------");
-            sb.Append("\r\n");
-            
-            foreach(var f in files)
-            {
-                var pathParts = f.Split("/");
-                var lastPath = pathParts[pathParts.Length - 1];
-                sb.Append(lastPath);
-                sb.Append("\r\n");
-            }
-
-            sb.Append("------------------------------------------");
-            sb.Append("\r\n");
-
-            return sb.ToString();
-        }
     }
 }

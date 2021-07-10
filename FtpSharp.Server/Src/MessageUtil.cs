@@ -39,7 +39,7 @@ namespace FtpSharp.Server
         public static string TrimCRLF(string input)
         {
             char[] charToTrim = {'\r', '\n'};
-		    var s = input.Trim(charToTrim);
+            var s = input.Trim(charToTrim);
             return s;
         }
     }

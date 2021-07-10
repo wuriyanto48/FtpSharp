@@ -17,6 +17,7 @@ namespace FtpSharp.Server.Command
             commands.Add(ECommand.PWD, new PWDCommand(clientObject));
             commands.Add(ECommand.LIST, new LISTCommand(clientObject));
 
+            commands.Add(ECommand.SIZE, new SIZECommand(clientObject));
             commands.Add(ECommand.RETR, new RETRCommand(clientObject));
 
             commands.Add(ECommand.EPRT, new EPRTCommand(clientObject));
@@ -77,6 +78,7 @@ namespace FtpSharp.Server.Command
         STAT,
         HELP,
         NOOP,
+        SIZE,
 
         NOTVALID,
     }

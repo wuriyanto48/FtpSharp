@@ -24,9 +24,20 @@ namespace FtpSharp.Server
                 Environment.Exit(-1);
             }
             
-            using var server = new Server(config);
-            server.Bind();
-            server.Start();
+            try
+            {
+                using var server = new Server(config);
+
+                // bind ip address and port
+                server.Bind();
+
+                // bind succeed, start server
+                server.Start();
+            } catch (Exception e)
+            {
+                Console.WriteLine($"error opening config file {e.Message}");
+                Environment.Exit(-1);
+            }
         }
     }
 }

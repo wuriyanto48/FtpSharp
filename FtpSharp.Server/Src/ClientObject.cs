@@ -108,8 +108,8 @@ namespace FtpSharp.Server
                 content = state.sb.ToString();
                 Console.WriteLine($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
                 if (content.IndexOf("\n") > -1 || content.IndexOf("\r\n") > -1) {
-                    // send data to client  
-                    Send(state);
+                    // process and send command data to the client  
+                    ProcessCommand(state);
                     
                 } else {
                     // Not all data received. Get more.  
@@ -119,7 +119,7 @@ namespace FtpSharp.Server
             } 
         }
 
-        private void Send(ClientObject state)
+        private void ProcessCommand(ClientObject state)
         {
             string data = state.sb.ToString();
             string[] messageParts = data.Split(" ");

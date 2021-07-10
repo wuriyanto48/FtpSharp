@@ -25,16 +25,16 @@ namespace FtpSharp.Server
 
         public Auth.IAuth Auth { get; set; }
 
-        public DataType dataType;
+        public DataType DataType { get; set; }
 
-        public Socket dataConn;
+        public IDataConnection DataConn { get; set; }
 
         private Command.Commands commands;
 
         public ClientObject(Socket clientSocket)
         {
             _clientSocket = clientSocket;
-            dataType = DataType.DEFAULT;
+            DataType = DataType.DEFAULT;
 
             commands = new Command.Commands(this);
             WorkDir = "/";
@@ -103,17 +103,12 @@ namespace FtpSharp.Server
                 state.sb.Append(Encoding.ASCII.GetString(
                     state.Buffer, 0, bytesRead));
     
-                // Check for end-of-file tag. If it is not there, read
-                // more data.  
+                // Check for end-of-input tag with \n or \r\n. 
+                // If it is not there, read more data.  
                 content = state.sb.ToString();
-                Console.WriteLine($"content {content.Equals("QUIT\r\n")}");
                 Console.WriteLine($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
                 if (content.IndexOf("\n") > -1 || content.IndexOf("\r\n") > -1) {
-                    // All the data has been read from the
-                    // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",  
-                        content.Length, content );  
-                    // Echo the data back to the client.  
+                    // send data to client  
                     Send(state);
                     
                 } else {
@@ -131,8 +126,10 @@ namespace FtpSharp.Server
             Console.WriteLine(String.Join(", ", messageParts));
 
             string command = messageParts[0];
+            command = MessageUtil.TrimCRLF(command);
+
             string[] args = messageParts.Slice(1, messageParts.Length);
-            var isValidCommand = Enum.TryParse(typeof(Command.ECommand), command, false, out var eCommand);
+            var isValidCommand = Enum.TryParse(typeof(Command.ECommand), command.ToUpper(), false, out var eCommand);
             if (!isValidCommand)
             {
                 var ftpCommand = commands.GetCommand(Command.ECommand.NOTVALID);
@@ -165,24 +162,12 @@ namespace FtpSharp.Server
                 // sendDone.Set(); 
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent); 
 
+                // client doesn't close its connection
+                // then listen more data
                 ClientObject newState = new ClientObject(clientSocket);
 
                 clientSocket.BeginReceive(newState.Buffer, 0, ClientObject.BufferSize, 0,  
                         new AsyncCallback(ReadCallback), newState);
-
-                // TODO
-                // if (data.Equals("QUIT\r\n"))
-                // {   
-                //     Console.WriteLine("closing connection....");
-                //     clientSocket.Shutdown(SocketShutdown.Both);  
-                //     clientSocket.Close();
-                // } else
-                // {
-                //     ClientObject newState = new ClientObject(clientSocket);
-
-                //     clientSocket.BeginReceive(newState.Buffer, 0, ClientObject.BufferSize, 0,  
-                //             new AsyncCallback(ReadCallback), newState);
-                // }
 
             } catch (Exception e)
             {

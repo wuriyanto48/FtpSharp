@@ -61,13 +61,13 @@ namespace FtpSharp.Server
         {
             byte[] byteData = MessageUtil.BuildReply(this, 220);
             _clientSocket.BeginSend(byteData, 0, byteData.Length, 0, 
-                new AsyncCallback(SendCallback), this);
+                new AsyncCallback(WriteCallback), this);
         }
 
         public void Write(byte[] data)
         {
             _clientSocket.BeginSend(data, 0, data.Length, 0, 
-                new AsyncCallback(SendCallback), this);
+                new AsyncCallback(WriteCallback), this);
         }
 
         public void ProcessMessage()
@@ -149,7 +149,7 @@ namespace FtpSharp.Server
             // sendDone.WaitOne();
         }
 
-        private void SendCallback(IAsyncResult ar)
+        private void WriteCallback(IAsyncResult ar)
         {
             try
             {

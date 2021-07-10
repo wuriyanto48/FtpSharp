@@ -2,7 +2,7 @@ using System;
 
 namespace FtpSharp.Server.Command
 {
-    public class PASSCommand : ICommand
+    public sealed class PASSCommand : ICommand
     {
         private ClientObject _clientObject;
 

@@ -3,7 +3,7 @@ using System;
 namespace FtpSharp.Server.Command
 {
     // PORT 127,0,0,1,236,1
-    public class PORTCommand : ICommand
+    public sealed class PORTCommand : ICommand
     {
         private ClientObject _clientObject;
 

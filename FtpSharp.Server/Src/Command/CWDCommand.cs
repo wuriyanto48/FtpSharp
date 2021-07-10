@@ -3,7 +3,7 @@ using System.IO;
 
 namespace FtpSharp.Server.Command
 {
-    public class CWDCommand : ICommand
+    public sealed class CWDCommand : ICommand
     {
         private ClientObject _clientObject;
 

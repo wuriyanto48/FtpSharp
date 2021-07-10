@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace FtpSharp.Server.Command
 {
-    public class NotImplementedCommand : ICommand
+    public sealed class NotImplementedCommand : ICommand
     {
         private ClientObject _clientObject;
 

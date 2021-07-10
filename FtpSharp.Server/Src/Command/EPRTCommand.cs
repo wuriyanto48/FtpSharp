@@ -3,7 +3,7 @@ using System;
 namespace FtpSharp.Server.Command
 {
     // EPRT |2|::1|60534|
-    public class EPRTCommand : ICommand
+    public sealed class EPRTCommand : ICommand
     {
         private ClientObject _clientObject;
 

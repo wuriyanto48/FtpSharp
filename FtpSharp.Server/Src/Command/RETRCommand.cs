@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FtpSharp.Server.Command
 {
-    public class RETRCommand : ICommand
+    public sealed class RETRCommand : ICommand
     {
         private ClientObject _clientObject;
 

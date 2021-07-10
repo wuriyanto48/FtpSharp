@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FtpSharp.Server.Command
 {
-    public class SIZECommand : ICommand
+    public sealed class SIZECommand : ICommand
     {
         private ClientObject _clientObject;
 

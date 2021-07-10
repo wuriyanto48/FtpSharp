@@ -14,20 +14,27 @@ namespace FtpSharp.Server.Command
 
         public void Process(string[] args)
         {
-            var workDir = Path.Join(_clientObject.WorkDir, args[0]);
-            var absolutePath = Path.GetFullPath(Path.Join(_clientObject.RootDir, workDir));
+            var arg = MessageUtil.TrimCRLF(args[0]);
+            var workDir = Path.Join(_clientObject.WorkDir, arg);
+            var absolutePath = Path.Join(_clientObject.RootDir, workDir);
 
-            Console.WriteLine($"curr dir 1: {Directory.GetCurrentDirectory()}");
+            DirectoryInfo dir = new DirectoryInfo(absolutePath);
+            if (!dir.Exists)
+            {
+                byte[] invalidCwdRequest = MessageUtil.BuildReply(_clientObject, 550, "Change directory failed");
+                _clientObject.Write(invalidCwdRequest);
+                return;
+            }
 
-            // Directory.SetCurrentDirectory(absolutePath);
-
-            DirectoryInfo dir = new DirectoryInfo(workDir);
-
-            Console.WriteLine($"curr dir 2: {Directory.GetCurrentDirectory()}");
+            string[] files = Directory.GetFiles(absolutePath);
+            foreach(var f in files)
+            {
+                Console.WriteLine($"file {f}");
+            }
 
             Console.WriteLine($" dir.Exists: {dir.Exists}");
             
-            Console.WriteLine($"workDir: {Path.GetFullPath(workDir)}");
+            Console.WriteLine($"workDir: {workDir}");
             Console.WriteLine($"absolutePath: {absolutePath}");
 
             Console.WriteLine("client send CWD command");
@@ -36,7 +43,6 @@ namespace FtpSharp.Server.Command
             _clientObject.WorkDir = workDir;
             
             byte[] data = MessageUtil.BuildReply(_clientObject, 200);
-
             _clientObject.Write(data);
         }
 

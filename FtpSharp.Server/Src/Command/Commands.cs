@@ -14,6 +14,12 @@ namespace FtpSharp.Server.Command
             commands.Add(ECommand.PASS, new PASSCommand(clientObject));
             commands.Add(ECommand.CWD, new CWDCommand(clientObject));
             commands.Add(ECommand.PWD, new PWDCommand(clientObject));
+
+            commands.Add(ECommand.EPRT, new EPRTCommand(clientObject));
+            commands.Add(ECommand.PORT, new PORTCommand(clientObject));
+
+            commands.Add(ECommand.TYPE, new TYPECommand(clientObject));
+
             commands.Add(ECommand.QUIT, new QuitCommand(clientObject));
             commands.Add(ECommand.NOTVALID, new NotImplementedCommand(clientObject));
         }

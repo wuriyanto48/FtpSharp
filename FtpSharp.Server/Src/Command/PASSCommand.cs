@@ -16,6 +16,7 @@ namespace FtpSharp.Server.Command
             Console.WriteLine("client send PASS command");
             Console.WriteLine($"{String.Join(",", args)}");
             var password = args[0];
+            password = MessageUtil.TrimCRLF(password);
 
             var validAuth = _clientObject.Auth.Check(_clientObject.ReqUsername, password);
             if (!validAuth)

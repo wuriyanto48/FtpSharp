@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace FtpSharp.Server
 {
-    public class Config
+    public sealed class Config
     {
         [JsonPropertyName("address")]
         public string Address { get; set; }

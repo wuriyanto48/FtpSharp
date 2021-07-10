@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace FtpSharp.Server.Auth
 {
-    public class DefaultAuth : IAuth
+    public sealed class DefaultAuth : IAuth
     {
         private HMACSHA256 hMACSHA256;
 
@@ -17,9 +17,6 @@ namespace FtpSharp.Server.Auth
 
         public DefaultAuth(string secret, string serverUsername, string serverPassword)
         {
-            // append CRLF to server password
-            serverPassword = String.Format($"{serverPassword}\r\n");
-
              hMACSHA256 = new HMACSHA256(_ascii.GetBytes(secret));
 
             _serverUsername = serverUsername;
@@ -30,7 +27,6 @@ namespace FtpSharp.Server.Auth
         {
             var usernameBytes = Encoding.ASCII.GetBytes(username);
             var serverUsernameBytes = Encoding.ASCII.GetBytes(_serverUsername);
-            serverUsernameBytes = serverUsernameBytes.Concatenate(MessageUtil.CRLF);
 
             long diffUsername = usernameBytes.Length ^ serverUsernameBytes.Length;
             for (var i = 0; i < usernameBytes.Length && i < serverUsernameBytes.Length; i++)

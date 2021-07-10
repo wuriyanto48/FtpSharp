@@ -24,7 +24,7 @@ namespace FtpSharp.Server
         {
             string reply = Reply.GetReply(code);
             byte[] byteData = Encoding.ASCII.GetBytes(reply);
-            byteData = byteData.Concatenate(EOL(clientObject.dataType));
+            byteData = byteData.Concatenate(EOL(clientObject.DataType));
             return byteData;
         }
 
@@ -32,8 +32,15 @@ namespace FtpSharp.Server
         {
             string reply = String.Format($"{code} {message}");
             byte[] byteData = Encoding.ASCII.GetBytes(reply);
-            byteData = byteData.Concatenate(EOL(clientObject.dataType));
+            byteData = byteData.Concatenate(EOL(clientObject.DataType));
             return byteData;
+        }
+
+        public static string TrimCRLF(string input)
+        {
+            char[] charToTrim = {'\r', '\n'};
+		    var s = input.Trim(charToTrim);
+            return s;
         }
     }
 }

@@ -15,12 +15,12 @@ Based on Spec https://datatracker.ietf.org/doc/html/rfc959
 
 ### Build
 
-Non self contained build
+#### Non self contained build
 ```shell
 $ make build
 ```
 
-Self contained build
+#### Self contained build
 
 Linux
 ```
@@ -36,12 +36,12 @@ $ make build-osx
 
 > Make sure to add `config.json` param
 
-Non self contained `run`
+#### Non self contained `run`
 ```shell
 $ dotnet build/FtpSharp.Server.dll config.json
 ```
 
-Self contained `run`
+#### Self contained `run`
 ```shell
 $ ./build/FtpSharp.Server config.json
 ```

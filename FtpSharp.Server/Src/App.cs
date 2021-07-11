@@ -35,7 +35,7 @@ namespace FtpSharp.Server
                 server.Start();
             } catch (Exception e)
             {
-                Console.WriteLine($"error opening config file {e.Message}");
+                Console.WriteLine($"error start FtpSharp Server");
                 Environment.Exit(-1);
             }
         }

@@ -7,7 +7,7 @@ namespace FtpSharp.Server
     public sealed class SessionIdGenerator
     {
         public static readonly Random _random = new Random();
-	
+		
 		public static string RandomString(int size, bool lowerCase = false)  
 		{ 
 			var builder = new StringBuilder(size);  

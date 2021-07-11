@@ -6,7 +6,7 @@ namespace FtpSharp.Server
 {
     public sealed class SessionIdGenerator
     {
-        public static readonly Random _random = new Random();
+		public static readonly Random _random = new Random();
 		
 		public static string RandomString(int size, bool lowerCase = false)  
 		{ 
@@ -20,13 +20,11 @@ namespace FtpSharp.Server
 			// char is a single Unicode character  
 			char offset = lowerCase ? 'a' : 'A'; 
 			const int lettersOffset = 26; // A...Z or a..z: length = 26  
-
 			for (var i = 0; i < size; i++)  
-			{  
-			var charPos = (char)_random.Next(offset, offset + lettersOffset);  
-			builder.Append(charPos);
+			{
+				var charPos = (char)_random.Next(offset, offset + lettersOffset);  
+				builder.Append(charPos);
 			}
-			
 			return lowerCase ? builder.ToString().ToLower() : builder.ToString();  
 		} 
 

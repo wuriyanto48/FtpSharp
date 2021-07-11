@@ -15,16 +15,35 @@ Based on Spec https://datatracker.ietf.org/doc/html/rfc959
 
 ### Build
 
+Non self contained build
 ```shell
 $ make build
 ```
 
+Self contained build
+
+Linux
+```
+$ make build-linux
+```
+
+MacOS
+```
+$ make build-osx
+```
+
 ### Running
 
-Make sure to add `config.json` param
+> Make sure to add `config.json` param
 
+Non self contained `run`
 ```shell
-$ dotnet app/FtpSharp.Server.dll config.json
+$ dotnet build/FtpSharp.Server.dll config.json
+```
+
+Self contained `run`
+```shell
+$ ./build/FtpSharp.Server config.json
 ```
 
 ### Test with FTP Client

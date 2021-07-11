@@ -33,7 +33,7 @@ namespace FtpSharp.Server
 
                 // bind succeed, start server
                 server.Start();
-            } catch (Exception e)
+            } catch (Exception)
             {
                 Console.WriteLine($"error start FtpSharp Server");
                 Environment.Exit(-1);

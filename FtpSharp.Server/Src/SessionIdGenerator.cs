@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 namespace FtpSharp.Server
 {
     public sealed class SessionIdGenerator
-    {
+	{
 		public static readonly Random _random = new Random();
 
 		public static string RandomString(int size, bool lowerCase = false)  
@@ -39,6 +39,6 @@ namespace FtpSharp.Server
 			}
 			return builder.ToString().Slice(0, 15);
 		}
-    }
+	}
 
 }

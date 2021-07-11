@@ -31,7 +31,7 @@ namespace FtpSharp.Server
 		} 
 
         public static string Generate()
-        {
+		{
 			using SHA256 sha256Hash = SHA256.Create();
 			byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(RandomString(10, true)));
 			StringBuilder builder = new StringBuilder();
@@ -40,7 +40,7 @@ namespace FtpSharp.Server
 				builder.Append(bytes[i].ToString());
 			}
 			return builder.ToString().Slice(0, 15);
-        }
+		}
     }
 
 }

@@ -20,6 +20,7 @@ namespace FtpSharp.Server.Command
             commands.Add(ECommand.SIZE, new SIZECommand(clientObject));
             commands.Add(ECommand.RETR, new RETRCommand(clientObject));
 
+            commands.Add(ECommand.LPRT, new LPRTCommand(clientObject));
             commands.Add(ECommand.EPRT, new EPRTCommand(clientObject));
             commands.Add(ECommand.PORT, new PORTCommand(clientObject));
 

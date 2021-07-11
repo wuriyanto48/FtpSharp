@@ -1,7 +1,8 @@
 using System;
 
 namespace FtpSharp.Server.Command
-{
+{ 
+    // https://datatracker.ietf.org/doc/html/rfc1639
     // LPRT 6,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,236,118
     public sealed class LPRTCommand : ICommand
     {

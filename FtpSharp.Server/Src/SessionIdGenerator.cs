@@ -35,7 +35,7 @@ namespace FtpSharp.Server
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < bytes.Length; i++)
 			{
-				builder.Append(bytes[i].ToString());
+				builder.Append(bytes[i].ToString("X2"));
 			}
 			return builder.ToString().Slice(0, 15);
 		}

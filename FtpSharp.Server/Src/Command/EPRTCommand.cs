@@ -2,6 +2,8 @@ using System;
 
 namespace FtpSharp.Server.Command
 {
+    // https://datatracker.ietf.org/doc/html/rfc2428
+
     // EPRT |2|::1|60534|
     public sealed class EPRTCommand : ICommand
     {
@@ -29,6 +31,11 @@ namespace FtpSharp.Server.Command
                 return;
             }
 
+            // https://datatracker.ietf.org/doc/html/rfc2428
+            // AF Number   Protocol
+            // ---------   --------
+            // 1           Internet Protocol, Version 4 [Pos81a]
+            // 2           Internet Protocol, Version 6 [DH96]
             if (addressFamily != 1 && addressFamily != 2)
             {
                 byte[] invalidAddressFamilyData = MessageUtil.BuildReply(_clientObject, 522, "Network protocol not supported");

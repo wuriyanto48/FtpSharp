@@ -22,7 +22,8 @@ _ReSharper.*
 *.txt
 *.log
 .env
-app/
+
+build/
 
 volumes/
 *.db

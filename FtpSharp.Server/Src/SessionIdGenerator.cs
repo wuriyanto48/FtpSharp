@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace FtpSharp.Server
 {
-    public sealed class SessionIdGenerator
+	public sealed class SessionIdGenerator
 	{
 		public static readonly Random _random = new Random();
 

@@ -44,7 +44,6 @@ namespace FtpSharp.Server
 					}
 					return builder.ToString().Slice(0, 15);
 				}
-				
             } catch (Exception e)
             {
                 throw new Exception(e.Message);

@@ -42,7 +42,7 @@ namespace FtpSharp.Server
 					{  
 						builder.Append(bytes[i].ToString());
 					}  
-                	return builder.ToString().Slice(0, 15);
+					return builder.ToString().Slice(0, 15);
 				}
 				
             } catch (Exception e)

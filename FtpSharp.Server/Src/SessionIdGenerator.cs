@@ -37,11 +37,11 @@ namespace FtpSharp.Server
 				using ( SHA256 sha256Hash = SHA256.Create())
 				{
 					byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(RandomString(10, true)));
-					StringBuilder builder = new StringBuilder();  
-					for (int i = 0; i < bytes.Length; i++)  
-					{  
+					StringBuilder builder = new StringBuilder();
+					for (int i = 0; i < bytes.Length; i++)
+					{
 						builder.Append(bytes[i].ToString());
-					}  
+					}
 					return builder.ToString().Slice(0, 15);
 				}
 				

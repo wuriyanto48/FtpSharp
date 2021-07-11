@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace FtpSharp.Server 
 {
@@ -17,6 +18,8 @@ namespace FtpSharp.Server
 
         private Socket _listener = null;
 
+        public Dictionary<string, ClientObject> _clients;
+
         private Config _config;
 
         private string _rootDir;
@@ -25,13 +28,36 @@ namespace FtpSharp.Server
 
         public static bool _isRunning = true;
 
+        public QuitEventNotifier _quitEventNotifier;
+        public QuitEventHandler _quitEventHandler;
+
         public Server(Config config)
         {
             _config = config;
             _rootDir = Path.GetFullPath(_config.RootDir);
 
+            // client database
+            _clients = new Dictionary<string, ClientObject>();
+
             _auth = new Auth.DefaultAuth(config.Secret, config.ServerUsername, config.ServerPassword);
+
+            // register client quit event
+            _quitEventNotifier = new QuitEventNotifier();
+            _quitEventHandler = new QuitEventHandler();
+            _quitEventHandler.RegisterNotifier(_quitEventNotifier, this);
+
             Reply.InitReply();
+        }
+
+        public void ShowClients()
+        {
+            Console.WriteLine("------ connected clients: ------");
+            foreach(KeyValuePair<string, ClientObject> entry in _clients)
+            {
+                Console.WriteLine($"- {entry.Key}");
+            }
+
+            Console.WriteLine("--------------------------------");
         }
 
         public void Dispose()
@@ -102,6 +128,11 @@ namespace FtpSharp.Server
 
                 ClientObject clientObject = new ClientObject(socketClient);
 
+                clientObject.Server = this;
+
+                // add each new client object to database;
+                _clients.Add(clientObject.SessionID, clientObject);
+
                 clientObject.RootDir = _rootDir;
 
                 clientObject.Auth = _auth;
@@ -109,6 +140,8 @@ namespace FtpSharp.Server
                 clientObject.WriteInitialMessage();
                 
                 clientObject.ProcessMessage();
+
+                ShowClients();
                 
                 // receiveDone.WaitOne();
             }

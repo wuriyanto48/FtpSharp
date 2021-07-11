@@ -13,6 +13,8 @@ namespace FtpSharp.Server
 
         public StringBuilder sb = new StringBuilder();
 
+        public string SessionID { get; }
+
         public Socket _clientSocket = null;
 
         public string RootDir  { get; set; }
@@ -31,10 +33,14 @@ namespace FtpSharp.Server
 
         private Command.Commands commands;
 
+        public Server Server { get; set; }
+
         public ClientObject(Socket clientSocket)
         {
             _clientSocket = clientSocket;
             DataType = DataType.DEFAULT;
+
+            SessionID = SessionIdGenerator.Generate();
 
             commands = new Command.Commands(this);
             WorkDir = "/";

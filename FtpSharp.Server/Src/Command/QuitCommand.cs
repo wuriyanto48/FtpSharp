@@ -14,6 +14,9 @@ namespace FtpSharp.Server.Command
 
         public void Process(string[] args)
         {
+            // notify quit event handler
+            _clientObject.Server._quitEventNotifier.Notify(new QuitEventArgs(_clientObject.SessionID));
+            
             byte[] data = MessageUtil.BuildReply(_clientObject, 221);
             _clientObject.Write(data);
             _clientObject._clientSocket.Shutdown(SocketShutdown.Both);  

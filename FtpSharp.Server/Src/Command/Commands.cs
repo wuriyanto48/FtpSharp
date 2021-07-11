@@ -26,7 +26,7 @@ namespace FtpSharp.Server.Command
 
             commands.Add(ECommand.TYPE, new TYPECommand(clientObject));
 
-            commands.Add(ECommand.QUIT, new QuitCommand(clientObject));
+            commands.Add(ECommand.QUIT, new QUITCommand(clientObject));
             commands.Add(ECommand.NOTVALID, new NotImplementedCommand(clientObject));
         }
 

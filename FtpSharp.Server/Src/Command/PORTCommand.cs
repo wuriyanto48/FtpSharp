@@ -31,7 +31,7 @@ namespace FtpSharp.Server.Command
             var portSegOneInt = int.Parse(portSegOne);
             var portSegTwoInt = int.Parse(portSegTwo);
             
-            var port = portSegOneInt<<8 + portSegTwoInt;
+            var port = (portSegOneInt<<8) + portSegTwoInt;
 
             _logger.LogInformation($"host: {host}");
             _logger.LogInformation($"port: {port}");

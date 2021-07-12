@@ -1,0 +1,15 @@
+[Unit]
+Description=An experimental FTP Server written "from scratch" in C#
+Documentation=https://github.com/wuriyanto48/FtpSharp/blob/master/README.md
+After=network.target
+
+[Service]
+Type=simple
+User=vagrant
+ExecStart=/home/vagrant/FtpSharp/build/FtpSharp.Server config.json
+StandardOutput=file:/var/log/FtpSharp.log
+StandardError=file:/var/log/FtpSharp-error.log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

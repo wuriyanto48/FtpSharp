@@ -8,7 +8,7 @@
 
 ### Based on Spec 
 - https://datatracker.ietf.org/doc/html/rfc959
-- (EPRT Extenssion) https://datatracker.ietf.org/doc/html/rfc2428
+- (EPRT Extension) https://datatracker.ietf.org/doc/html/rfc2428
 - (LPRT Extension) https://datatracker.ietf.org/doc/html/rfc1639
 
 ### Requirements

@@ -31,8 +31,8 @@ namespace FtpSharp.Server.Command
             
             if (dataType == "I")
             {
-                _clientObject.DataType = DataType.BINARY;
-                byte[] responseSetBinarydata = MessageUtil.BuildReply(_clientObject, 200, "TYPE set to BINARY");
+                _clientObject.DataType = DataType.IMAGE;
+                byte[] responseSetBinarydata = MessageUtil.BuildReply(_clientObject, 200, "TYPE set to IMAGE");
                 _clientObject.Write(responseSetBinarydata);
                 return;
             }

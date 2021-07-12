@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace FtpSharp.Server 
 {
-    public enum DataType
-    {
-        ASCII, BINARY, DEFAULT
-    }
-
     public static class Reply
     {
         public static Dictionary<int, string> replies = new Dictionary<int, string>();

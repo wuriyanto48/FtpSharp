@@ -3,10 +3,19 @@ using System.Text;
 
 namespace FtpSharp.Server
 {
+    public enum DataType
+    {
+        ASCII, IMAGE, EBCDIC, DEFAULT
+    }
+
     public static class MessageUtil
     {
         public static readonly byte[] CRLF = new byte[] {13, 10};
+
         public static readonly byte[] LF = new byte[] {10};
+
+        // https://www.ibm.com/docs/en/xl-fortran-aix/16.1.0?topic=appendix-ascii-ebcdic-character-sets
+        public static readonly byte[] NAK = new byte[] {21};
 
         public static byte[] EOL(DataType dataType)
         {
@@ -14,8 +23,10 @@ namespace FtpSharp.Server
             {
                 case DataType.ASCII:
                     return CRLF;
-                case DataType.BINARY:
+                case DataType.IMAGE:
                     return LF;
+                case DataType.EBCDIC:
+                    return NAK;
                 default:
                     return LF;
             }

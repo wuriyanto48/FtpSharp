@@ -45,7 +45,7 @@ namespace FtpSharp.Server.Command
             _clientObject.Write(openingConnData);
 
             // open file
-            FileStream fileStream = fileInfo.OpenRead();
+            using FileStream fileStream = fileInfo.OpenRead();
 
             if (_clientObject.DataConn.Client() != null)
             {

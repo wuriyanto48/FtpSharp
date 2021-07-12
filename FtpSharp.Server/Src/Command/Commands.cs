@@ -18,6 +18,7 @@ namespace FtpSharp.Server.Command
             commands.Add(ECommand.LIST, new LISTCommand(clientObject));
 
             commands.Add(ECommand.SIZE, new SIZECommand(clientObject));
+            commands.Add(ECommand.MDTM, new MDTMCommand(clientObject));
             commands.Add(ECommand.RETR, new RETRCommand(clientObject));
             commands.Add(ECommand.STOR, new STORCommand(clientObject));
 
@@ -74,6 +75,7 @@ namespace FtpSharp.Server.Command
         MKD,
         PWD,
         LIST,
+        MDTM,
         NLST,
         SITE,
         SYST,

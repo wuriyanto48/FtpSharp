@@ -20,7 +20,6 @@ namespace FtpSharp.Server.Command
         public void Process(string[] args)
         {
             _logger.LogInformation("client send STOR command");
-            _logger.LogInformation(String.Join(",", args));
 
             var arg = args[0];
             arg = MessageUtil.TrimCRLF(arg);

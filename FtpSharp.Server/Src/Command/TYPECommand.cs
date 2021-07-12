@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -6,15 +7,18 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public TYPECommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<TYPECommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send TYPE command");
-            Console.WriteLine($"{String.Join(",", args)}");
+            _logger.LogInformation("client send TYPE command");
+            _logger.LogInformation($"{String.Join(",", args)}");
             var dataType = args[0];
             dataType = MessageUtil.TrimCRLF(dataType);
             if (dataType == "A")

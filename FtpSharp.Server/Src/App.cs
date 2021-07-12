@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server
 {
@@ -6,10 +7,12 @@ namespace FtpSharp.Server
     {
         static void Main(string[] args)
         {
+            ILogger logger = ApplicationLogging.CreateLogger<App>();
+
 
             if (args.Length <= 0)
             {
-                Console.WriteLine("required config file");
+                logger.LogInformation("required config file");
                 Environment.Exit(-1);
             }
 
@@ -20,7 +23,7 @@ namespace FtpSharp.Server
                 config = Config.FromFile(args[0]);
             } catch (Exception e)
             {
-                Console.WriteLine($"error opening config file {e.Message}");
+                logger.LogInformation($"error opening config file {e.Message}");
                 Environment.Exit(-1);
             }
             
@@ -35,7 +38,7 @@ namespace FtpSharp.Server
                 server.Start();
             } catch (Exception)
             {
-                Console.WriteLine($"error start FtpSharp Server");
+                logger.LogInformation($"error start FtpSharp Server");
                 Environment.Exit(-1);
             }
         }

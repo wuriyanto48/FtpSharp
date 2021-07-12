@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server
 {
@@ -35,17 +36,25 @@ namespace FtpSharp.Server
     public class QuitEventHandler
     {
         private Server _server;
-        public void RegisterNotifier(QuitEventNotifier notifier, Server server)
+
+        private readonly ILogger _logger;
+
+        public QuitEventHandler(Server server)
         {
-            Console.WriteLine("register notifier");
             _server = server;
+            _logger = ApplicationLogging.CreateLogger<QuitEventHandler>();
+        }
+
+        public void RegisterNotifier(QuitEventNotifier notifier)
+        {
+            _logger.LogInformation("register notifier");
             notifier.QuitCompletedEvent += HandleQuit;
         }
 
         private void HandleQuit(object sender, QuitEventArgs args)
         {
            bool removed = _server._clients.Remove(args.SessionID);
-           Console.WriteLine($"remove {args.SessionID} : {removed}");
+           _logger.LogInformation($"remove {args.SessionID} : {removed}");
 
            _server.ShowClients();
         }

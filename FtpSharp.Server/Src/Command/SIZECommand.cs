@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -8,14 +8,17 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public SIZECommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<SIZECommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send SIZE command");
+            _logger.LogInformation("client send SIZE command");
 
             var targetPath = "";
 

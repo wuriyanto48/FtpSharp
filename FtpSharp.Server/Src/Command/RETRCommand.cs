@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -8,14 +9,17 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public RETRCommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<RETRCommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send RETR command");
+            _logger.LogInformation("client send RETR command");
 
             var targetPath = "";
 

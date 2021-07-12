@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -6,15 +7,18 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public PASSCommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<PASSCommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send PASS command");
-            Console.WriteLine($"{String.Join(",", args)}");
+            _logger.LogInformation("client send PASS command");
+            _logger.LogInformation($"{String.Join(",", args)}");
             var password = args[0];
             password = MessageUtil.TrimCRLF(password);
 

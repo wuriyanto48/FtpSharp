@@ -1,10 +1,10 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.IO;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server 
 {
@@ -31,6 +31,8 @@ namespace FtpSharp.Server
         public QuitEventNotifier _quitEventNotifier;
         public QuitEventHandler _quitEventHandler;
 
+        private readonly ILogger _logger;
+
         public Server(Config config)
         {
             _config = config;
@@ -43,8 +45,12 @@ namespace FtpSharp.Server
 
             // register client quit event
             _quitEventNotifier = new QuitEventNotifier();
-            _quitEventHandler = new QuitEventHandler();
-            _quitEventHandler.RegisterNotifier(_quitEventNotifier, this);
+            _quitEventHandler = new QuitEventHandler(this);
+            _quitEventHandler.RegisterNotifier(_quitEventNotifier);
+
+            // init log
+            _logger = ApplicationLogging.CreateLogger<Server>();
+
 
             Reply.InitReply();
         }
@@ -64,7 +70,7 @@ namespace FtpSharp.Server
         {
             if (_listener.Connected)
             {
-                Console.WriteLine("closing server {}");
+                _logger.LogInformation("closing server {}");
                 _listener.Close();
             }
         }
@@ -83,12 +89,13 @@ namespace FtpSharp.Server
                 _listener.Listen(10);
             } catch(Exception e)
             {
-                Console.WriteLine($" error {e.StackTrace}");
+                _logger.LogError(exception: e, $" error {e.StackTrace}");
             }
         }
 
         public void Start()
         {
+            _logger.LogInformation($"running on port {_config.Port}");
             try
             {
 
@@ -97,7 +104,7 @@ namespace FtpSharp.Server
                     // Set the event to nonsignaled state.  
                     acceptDone.Reset();
 
-                    Console.WriteLine("waiting client connection...");
+                    _logger.LogInformation("waiting client connection...");
 
                     _listener.BeginAccept(new AsyncCallback(AcceptCallback), _listener);
 
@@ -109,7 +116,7 @@ namespace FtpSharp.Server
                 _listener.Close();
             } catch (Exception e)
             {
-                Console.WriteLine($" error {e.StackTrace}");
+                _logger.LogError(exception: e, $" error {e.StackTrace}");
             }
 
         }

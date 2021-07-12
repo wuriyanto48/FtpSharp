@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -7,9 +8,12 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public CWDCommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<CWDCommand>();
         }
 
         public void Process(string[] args)
@@ -18,8 +22,8 @@ namespace FtpSharp.Server.Command
             var workDir = Path.Join(_clientObject.WorkDir, arg);
             var absolutePath = Path.Join(_clientObject.RootDir, workDir);
 
-            Console.WriteLine($"workDir: {Path.TrimEndingDirectorySeparator(workDir)}");
-            Console.WriteLine($"absolutePath: {absolutePath}");
+            _logger.LogInformation($"workDir: {Path.TrimEndingDirectorySeparator(workDir)}");
+            _logger.LogInformation($"absolutePath: {absolutePath}");
 
             DirectoryInfo dir = new DirectoryInfo(absolutePath);
             if (!dir.Exists)
@@ -32,12 +36,12 @@ namespace FtpSharp.Server.Command
             string[] files = Directory.GetFiles(absolutePath);
             foreach(var f in files)
             {
-                Console.WriteLine($"file {f}");
+                _logger.LogInformation($"file {f}");
             }
 
-            Console.WriteLine($" dir.Exists: {dir.Exists}");
+            _logger.LogInformation($" dir.Exists: {dir.Exists}");
 
-            Console.WriteLine("client send CWD command");
+            _logger.LogInformation("client send CWD command");
 
             _clientObject.WorkDir = workDir;
             

@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 using System.Text;
-using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server
 {
@@ -35,12 +35,16 @@ namespace FtpSharp.Server
 
         public Server Server { get; set; }
 
+        private readonly ILogger _logger;
+
         public ClientObject(Socket clientSocket)
         {
             _clientSocket = clientSocket;
             DataType = DataType.DEFAULT;
 
             SessionID = SessionIdGenerator.Generate();
+
+            _logger = ApplicationLogging.CreateLogger<ClientObject>();
 
             commands = new Command.Commands(this);
             WorkDir = "/";
@@ -99,7 +103,7 @@ namespace FtpSharp.Server
     
             // Read data from the client socket.
             int bytesRead = clientSocket.EndReceive(ar);  
-            Console.WriteLine($"bytesRead {bytesRead}");
+            _logger.LogInformation($"bytesRead {bytesRead}");
 
             // receiveDone.Set();
             String content = String.Empty;
@@ -112,7 +116,7 @@ namespace FtpSharp.Server
                 // Check for end-of-input tag with \n or \r\n. 
                 // If it is not there, read more data.  
                 content = state.sb.ToString();
-                Console.WriteLine($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
+                _logger.LogInformation($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
                 if (content.IndexOf("\n") > -1 || content.IndexOf("\r\n") > -1) {
                     // process and send command data to the client  
                     ProcessCommand(state);
@@ -129,7 +133,7 @@ namespace FtpSharp.Server
         {
             string data = state.sb.ToString();
             string[] messageParts = data.Split(" ");
-            Console.WriteLine(String.Join(", ", messageParts));
+            _logger.LogInformation(String.Join(", ", messageParts));
 
             string command = messageParts[0];
             command = MessageUtil.TrimCRLF(command);
@@ -166,7 +170,7 @@ namespace FtpSharp.Server
                 // Complete sending the data
                 int bytesSent = clientSocket.EndSend(ar); 
                 // sendDone.Set(); 
-                Console.WriteLine("Sent {0} bytes to client.", bytesSent); 
+                _logger.LogInformation("Sent {0} bytes to client.", bytesSent); 
 
                 // client doesn't close its connection
                 // then listen more data
@@ -177,7 +181,7 @@ namespace FtpSharp.Server
 
             } catch (Exception e)
             {
-                Console.WriteLine($" error {e.StackTrace}");
+                _logger.LogError(exception: e, $"error {e.StackTrace}");
             }
         }
 

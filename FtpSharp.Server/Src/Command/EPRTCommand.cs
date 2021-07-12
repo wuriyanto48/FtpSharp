@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 {
@@ -9,14 +10,17 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public EPRTCommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<EPRTCommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send EPRT command");
+            _logger.LogInformation("client send EPRT command");
             var arg = args[0];
             arg = MessageUtil.TrimCRLF(arg);
             
@@ -46,8 +50,8 @@ namespace FtpSharp.Server.Command
             var host = dataParts[2];
             var port = int.Parse(dataParts[3]);
 
-            Console.WriteLine($"host: {host}");
-            Console.WriteLine($"port: {port}");
+            _logger.LogInformation($"host: {host}");
+            _logger.LogInformation($"port: {port}");
 
             IDataConnection dataConn = null;
             try
@@ -55,7 +59,7 @@ namespace FtpSharp.Server.Command
                 dataConn = new DefaultDataConnection(host, port);
             } catch (Exception e)
             {
-                Console.WriteLine($"**************** {e.Message}");
+                _logger.LogError(exception: e, $"{e.Message}");
                 byte[] invalidAddressFamilyData = MessageUtil.BuildReply(_clientObject, 425);
                 _clientObject.Write(invalidAddressFamilyData);
                 return;

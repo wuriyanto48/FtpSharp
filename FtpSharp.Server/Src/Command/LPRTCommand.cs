@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace FtpSharp.Server.Command
 { 
@@ -8,15 +9,18 @@ namespace FtpSharp.Server.Command
     {
         private ClientObject _clientObject;
 
+        private readonly ILogger _logger;
+
         public LPRTCommand(ClientObject clientObject)
         {
             _clientObject = clientObject;
+            _logger = ApplicationLogging.CreateLogger<LPRTCommand>();
         }
 
         public void Process(string[] args)
         {
-            Console.WriteLine("client send LPRT command");
-            Console.WriteLine($"{String.Join(",", args)}");
+            _logger.LogInformation("client send LPRT command");
+            _logger.LogInformation($"{String.Join(",", args)}");
             byte[] data = MessageUtil.BuildReply(_clientObject, 200, "Connection estabilished");
             _clientObject.Write(data);
         }

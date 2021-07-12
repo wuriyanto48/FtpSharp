@@ -57,13 +57,13 @@ namespace FtpSharp.Server
 
         public void ShowClients()
         {
-            Console.WriteLine("------ connected clients: ------");
+            _logger.LogInformation("------ connected clients: ------");
             foreach(KeyValuePair<string, ClientObject> entry in _clients)
             {
-                Console.WriteLine($"- {entry.Key}");
+                _logger.LogInformation($"- {entry.Key}");
             }
 
-            Console.WriteLine("--------------------------------");
+            _logger.LogInformation("--------------------------------");
         }
 
         public void Dispose()

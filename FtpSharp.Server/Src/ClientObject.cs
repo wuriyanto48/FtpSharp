@@ -116,7 +116,7 @@ namespace FtpSharp.Server
                 // Check for end-of-input tag with \n or \r\n. 
                 // If it is not there, read more data.  
                 content = state.sb.ToString();
-                _logger.LogInformation($"content {BitConverter.ToString(Encoding.ASCII.GetBytes(content))}");
+                _logger.LogInformation($"content {content}");
                 if (content.IndexOf("\n") > -1 || content.IndexOf("\r\n") > -1) {
                     // process and send command data to the client  
                     ProcessCommand(state);

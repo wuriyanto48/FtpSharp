@@ -56,7 +56,7 @@ namespace FtpSharp.Server.Command
             IDataConnection dataConn = null;
             try
             {
-                dataConn = new DefaultDataConnection(host, port);
+                dataConn = new ActiveDataConnection(host, port);
             } catch (Exception e)
             {
                 _logger.LogError(exception: e, $"{e.Message}");

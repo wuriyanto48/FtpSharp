@@ -47,14 +47,11 @@ namespace FtpSharp.Server.Command
             // open file
             using FileStream fileStream = fileInfo.OpenRead();
 
-            if (_clientObject.DataConn.Client() != null)
+            if (_clientObject.DataConn.IsConnected())
             {
-                if (_clientObject.DataConn.Client().Connected)
-                {
-                    fileStream.CopyTo(_clientObject.DataConn.Client().GetStream());
-                    _clientObject.DataConn.Close();
-                    _clientObject.DataConn = null;
-                }
+                fileStream.CopyTo(_clientObject.DataConn.Stream());
+                _clientObject.DataConn.Close();
+                _clientObject.DataConn = null;
             }
 
             byte[] validListRequestData = MessageUtil.BuildReply(_clientObject, 226);

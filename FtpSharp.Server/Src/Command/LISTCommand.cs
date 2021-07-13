@@ -48,14 +48,11 @@ namespace FtpSharp.Server.Command
             var formatted = FormatFileInfoSimple(files);
             var formattedBytes = Encoding.ASCII.GetBytes(formatted);
 
-            if (_clientObject.DataConn.Client() != null)
+            if (_clientObject.DataConn.IsConnected())
             {
-                if (_clientObject.DataConn.Client().Connected)
-                {
-                    _clientObject.DataConn.Client().GetStream().Write(formattedBytes, 0, formattedBytes.Length);
-                    _clientObject.DataConn.Close();
-                    _clientObject.DataConn = null;
-                }
+                _clientObject.DataConn.Stream().Write(formattedBytes, 0, formattedBytes.Length);
+                _clientObject.DataConn.Close();
+                _clientObject.DataConn = null;
             }
 
             byte[] validListRequestData = MessageUtil.BuildReply(_clientObject, 226);
@@ -74,9 +71,8 @@ namespace FtpSharp.Server.Command
 
             foreach(var f in files)
             {
-                var pathParts = f.Split("/");
-                var lastPath = pathParts[pathParts.Length - 1];
-                sb.Append(lastPath);
+                FileInfo fileInfo = new FileInfo(f);
+                sb.Append(fileInfo.Name);
                 sb.Append("\r\n");
             }
 
@@ -86,20 +82,11 @@ namespace FtpSharp.Server.Command
         private string FormatFileInfo(string[] files)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("--------------- File Info ----------------");
-            sb.Append("\r\n");
-
             foreach(var f in files)
             {
-                var pathParts = f.Split("/");
-                var lastPath = pathParts[pathParts.Length - 1];
-                sb.Append(lastPath);
-                sb.Append("\r\n");
+                FileInfo fileInfo = new FileInfo(f);
+                sb.Append($"{fileInfo.Length} {fileInfo.LastWriteTime.ToString("MM _ddHH:mm")} {fileInfo.Name}\r\n");
             }
-
-            sb.Append("------------------------------------------");
-            sb.Append("\r\n");
-
             return sb.ToString();
         }
     }

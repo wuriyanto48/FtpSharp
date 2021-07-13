@@ -25,28 +25,17 @@ namespace FtpSharp.Server.Command
             arg = MessageUtil.TrimCRLF(arg);
             var targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir, arg);
 
-            // FileInfo fileInfo = new FileInfo(targetPath);
-            // if (!fileInfo.Exists)
-            // {
-            //     byte[] invalidCwdRequest = MessageUtil.BuildReply(_clientObject, 550, "File is not exist");
-            //     _clientObject.Write(invalidCwdRequest);
-            //     return;
-            // }
-
             byte[] openingConnData = MessageUtil.BuildReply(_clientObject, 150);
             _clientObject.Write(openingConnData);
 
             // open file, if doesn't exit then create
             using FileStream fileStream = File.OpenWrite(targetPath);
 
-            if (_clientObject.DataConn.Client() != null)
+            if (_clientObject.DataConn.IsConnected())
             {
-                if (_clientObject.DataConn.Client().Connected)
-                {
-                    _clientObject.DataConn.Client().GetStream().CopyTo(fileStream);
-                    _clientObject.DataConn.Close();
-                    _clientObject.DataConn = null;
-                }
+                _clientObject.DataConn.Stream().CopyTo(fileStream);
+                _clientObject.DataConn.Close();
+                _clientObject.DataConn = null;
             }
 
             byte[] validListRequestData = MessageUtil.BuildReply(_clientObject, 226);

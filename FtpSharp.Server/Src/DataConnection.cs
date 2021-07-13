@@ -16,12 +16,12 @@ namespace FtpSharp.Server
 
         Stream Stream();
 
-        TcpClient Client();
+        bool IsConnected();
 
         void Close();
     }
 
-    public class DefaultDataConnection : IDataConnection
+    public class ActiveDataConnection : IDataConnection
     {
         private string _host { get; set; }
 
@@ -29,7 +29,7 @@ namespace FtpSharp.Server
 
         public TcpClient TcpConn { get; }
 
-        public DefaultDataConnection(string host, int port)
+        public ActiveDataConnection(string host, int port)
         {
             _host = host;
             _port = port;
@@ -53,9 +53,17 @@ namespace FtpSharp.Server
             return TcpConn.GetStream();
         }
 
-        public TcpClient Client()
+        public bool IsConnected()
         {
-            return TcpConn;
+            if (TcpConn != null)
+            {
+                if (TcpConn.Connected)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void Close()
@@ -77,6 +85,40 @@ namespace FtpSharp.Server
         public int Port()
         {
             return _port;
+        }
+    }
+
+    public class PassiveDataConnection : IDataConnection
+    {
+        
+        public PassiveDataConnection()
+        {
+            
+        }
+
+        public bool IsConnected()
+        {
+            return false;
+        }
+
+        public void Close()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Host()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Port()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Stream Stream()
+        {
+            throw new NotImplementedException();
         }
     }
 }

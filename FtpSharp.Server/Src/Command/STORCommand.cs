@@ -28,7 +28,7 @@ namespace FtpSharp.Server.Command
             byte[] openingConnData = MessageUtil.BuildReply(_clientObject, 150);
             _clientObject.Write(openingConnData);
 
-            // open file, if doesn't exit then create
+            // open file, if doesn't exist then create
             using FileStream fileStream = File.OpenWrite(targetPath);
 
             if (_clientObject.DataConn.IsConnected())

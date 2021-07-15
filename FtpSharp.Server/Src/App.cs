@@ -9,7 +9,6 @@ namespace FtpSharp.Server
         {
             ILogger logger = ApplicationLogging.CreateLogger<App>();
 
-
             if (args.Length <= 0)
             {
                 logger.LogInformation("required config file");
@@ -29,7 +28,9 @@ namespace FtpSharp.Server
             
             try
             {
-                using var server = new Server(config);
+                var server = new Server(config);
+
+                GracefulShutdown(logger, server);
 
                 // bind ip address and port
                 server.Bind();
@@ -41,6 +42,20 @@ namespace FtpSharp.Server
                 logger.LogInformation($"error start FtpSharp Server");
                 Environment.Exit(-1);
             }
+        }
+
+        static void GracefulShutdown(ILogger logger, Server server)
+        {
+            Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs e) {
+                e.Cancel = true;
+
+                // send signal to server process
+                Server.isRunning = false;
+                Server.acceptDone.Set();
+
+                server.Shutdown();
+                logger.LogInformation("terminate FtpSharp Process");
+            };
         }
     }
 }

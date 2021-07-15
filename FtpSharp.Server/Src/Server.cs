@@ -16,6 +16,11 @@ namespace FtpSharp.Server
 
         // public static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
+        // keepRunning may need to be marked volatile. 
+        // The main thread might cache it on a CPU register otherwise, 
+        // and won't notice the value change when the delegate is executed.
+        public static volatile bool isRunning = true;
+
         private Socket _listener = null;
 
         public Dictionary<string, ClientObject> _clients;
@@ -25,8 +30,6 @@ namespace FtpSharp.Server
         private string _rootDir;
 
         private Auth.IAuth _auth;
-
-        public static bool _isRunning = true;
 
         public QuitEventNotifier _quitEventNotifier;
         public QuitEventHandler _quitEventHandler;
@@ -75,6 +78,19 @@ namespace FtpSharp.Server
             }
         }
 
+        public void Shutdown()
+        {
+            if (_listener != null)
+            {
+                if (_listener.Connected)
+                {
+                    _listener.Close();
+                }
+            }
+
+            _logger.LogInformation($"shutdown FtpSharp");
+        }
+
         public void Bind()
         {
             IPHostEntry iPHostEntry = Dns.GetHostEntry(_config.Address);
@@ -99,7 +115,7 @@ namespace FtpSharp.Server
             try
             {
 
-                while (_isRunning)
+                while (isRunning)
                 {
                     // Set the event to nonsignaled state.  
                     acceptDone.Reset();
@@ -111,9 +127,7 @@ namespace FtpSharp.Server
                     acceptDone.WaitOne();
 
                 }
-
-                // close server when _isRunning set to false
-                _listener.Close();
+                
             } catch (Exception e)
             {
                 _logger.LogError(exception: e, $" error {e.StackTrace}");

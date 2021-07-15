@@ -25,18 +25,32 @@ namespace FtpSharp.Server.Auth
 
         public bool Check(string username, string password)
         {
+            if (!EqualUsername(username))
+                return false;
+
+            if (!EqualPassword(password))
+                return false;
+
+            return true;
+        }
+
+        private bool EqualUsername(string username)
+        {
             var usernameBytes = Encoding.ASCII.GetBytes(username);
             var serverUsernameBytes = Encoding.ASCII.GetBytes(_serverUsername);
 
             long diffUsername = usernameBytes.Length ^ serverUsernameBytes.Length;
             for (var i = 0; i < usernameBytes.Length && i < serverUsernameBytes.Length; i++)
-            {
                 diffUsername |= (uint) usernameBytes[i] ^ (uint) serverUsernameBytes[i];
-            }
 
             if (diffUsername != 0)
                 return false;
+            
+            return true;
+        }
 
+        private bool EqualPassword(string password)
+        {
             var base64ReqPassword = Convert.ToBase64String(hMACSHA256.ComputeHash(_ascii.GetBytes(password)));
 
             var passwordBytes = Encoding.ASCII.GetBytes(base64ReqPassword);
@@ -44,9 +58,7 @@ namespace FtpSharp.Server.Auth
 
             long diffPassword = passwordBytes.Length ^ serverPasswordBytes.Length;
             for (var i = 0; i < passwordBytes.Length && i < serverPasswordBytes.Length; i++)
-            {
                 diffPassword |= (uint) passwordBytes[i] ^ (uint) serverPasswordBytes[i];
-            }
 
             if (diffPassword != 0)
                 return false;

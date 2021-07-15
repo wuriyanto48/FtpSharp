@@ -1,9 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.IO;
-using System.Threading;
 
 namespace FtpSharp.Server 
 {
@@ -27,7 +25,9 @@ namespace FtpSharp.Server
 
         private int _port { get; set; }
 
-        public TcpClient TcpConn { get; }
+        private Socket _client;
+
+        private NetworkStream _stream;
 
         public ActiveDataConnection(string host, int port)
         {
@@ -37,11 +37,12 @@ namespace FtpSharp.Server
             IPHostEntry ipHostInfo = Dns.GetHostEntry(_host);  
             IPAddress ipAddress = ipHostInfo.AddressList[0]; 
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, _port);
-            TcpConn = new TcpClient();
+            _client = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             try
             {
-                TcpConn.Connect(remoteEP);
+                _client.Connect(remoteEP);
+                _stream = new NetworkStream(_client);
             } catch(SocketException e)
             {
                 throw new Exception(e.Message);
@@ -50,14 +51,14 @@ namespace FtpSharp.Server
 
         public Stream Stream()
         {
-            return TcpConn.GetStream();
+            return _stream;
         }
 
         public bool IsConnected()
         {
-            if (TcpConn != null)
+            if (_client != null)
             {
-                if (TcpConn.Connected)
+                if (_client.Connected)
                 {
                     return true;
                 }
@@ -68,12 +69,18 @@ namespace FtpSharp.Server
 
         public void Close()
         {
-            if (TcpConn != null)
+            if (_client != null)
             {
-                if (TcpConn.Connected)
+                if (_client.Connected)
                 {
-                    TcpConn.Close();
+                    _client.Shutdown(SocketShutdown.Both);
+                    _client.Close();
                 }
+            }
+
+            if (_stream != null)
+            {
+                _stream.Close();
             }
         }
 

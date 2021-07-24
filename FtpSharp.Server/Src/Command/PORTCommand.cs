@@ -28,10 +28,11 @@ namespace FtpSharp.Server.Command
             var portSegTwo = parts[5];
 
             var host = String.Format($"{parts[0]}.{parts[1]}.{parts[2]}.{parts[3]}");
-            var portSegOneInt = int.Parse(portSegOne);
-            var portSegTwoInt = int.Parse(portSegTwo);
+            byte portSegOneInt = byte.Parse(portSegOne);
+            byte portSegTwoInt = byte.Parse(portSegTwo);
             
-            var port = (portSegOneInt<<8) + portSegTwoInt;
+            // convert multibyte port to 16 bit unsigned integer
+            UInt16 port = (ushort)((portSegOneInt<<8) + portSegTwoInt);
 
             _logger.LogInformation($"host: {host}");
             _logger.LogInformation($"port: {port}");

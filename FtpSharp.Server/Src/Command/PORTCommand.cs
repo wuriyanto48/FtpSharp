@@ -44,8 +44,8 @@ namespace FtpSharp.Server.Command
             } catch (Exception e)
             {
                 _logger.LogError(exception: e, $"{e.Message}");
-                byte[] invalidAddressFamilyData = MessageUtil.BuildReply(_clientObject, 425);
-                _clientObject.Write(invalidAddressFamilyData);
+                byte[] failedOpenConnData = MessageUtil.BuildReply(_clientObject, 425);
+                _clientObject.Write(failedOpenConnData);
                 return;
             }
 

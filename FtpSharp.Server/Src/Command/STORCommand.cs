@@ -23,7 +23,18 @@ namespace FtpSharp.Server.Command
 
             var arg = args[0];
             arg = MessageUtil.TrimCRLF(arg);
-            var targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir, arg);
+
+            Func<string, string> getFile = (string a) => {
+                var argParts = arg.Split('/');
+                if (argParts.Length > 1)
+                {
+                    return argParts[argParts.Length-1];
+                }
+
+                return a;
+            };  
+
+            var targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir, getFile(arg));
 
             byte[] openingConnData = MessageUtil.BuildReply(_clientObject, 150);
             _clientObject.Write(openingConnData);

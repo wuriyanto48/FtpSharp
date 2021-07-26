@@ -18,7 +18,9 @@ namespace FtpSharp.Server.Command
 
         public void Process(string[] args)
         {
-            var arg = MessageUtil.TrimCRLF(args[0]);
+            var arg = args[0]; 
+            MessageUtil.TrimCRLF(ref arg);
+
             var workDir = Path.Join(_clientObject.WorkDir, arg);
             var absolutePath = Path.Join(_clientObject.RootDir, workDir);
 

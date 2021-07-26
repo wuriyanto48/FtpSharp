@@ -136,7 +136,7 @@ namespace FtpSharp.Server
             _logger.LogInformation(String.Join(", ", messageParts));
 
             string command = messageParts[0];
-            command = MessageUtil.TrimCRLF(command);
+            MessageUtil.TrimCRLF(ref command);
 
             string[] args = messageParts.Slice(1, messageParts.Length);
             var isValidCommand = Enum.TryParse(typeof(Command.ECommand), command.ToUpper(), false, out var eCommand);

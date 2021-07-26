@@ -20,7 +20,7 @@ namespace FtpSharp.Server.Command
             _logger.LogInformation("client send PASS command");
             _logger.LogInformation($"{String.Join(",", args)}");
             var password = args[0];
-            password = MessageUtil.TrimCRLF(password);
+            MessageUtil.TrimCRLF(ref password);
 
             var validAuth = _clientObject.Auth.Check(_clientObject.ReqUsername, password);
             if (!validAuth)

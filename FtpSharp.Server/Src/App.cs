@@ -12,7 +12,7 @@ namespace FtpSharp.Server
 
             if (args.Length <= 0)
             {
-                logger.LogInformation("required config file");
+                Console.WriteLine("required config file");
                 Environment.Exit(-1);
             }
 
@@ -23,7 +23,7 @@ namespace FtpSharp.Server
                 config = Config.FromFile(args[0]);
             } catch (Exception e)
             {
-                logger.LogInformation($"error opening config file {e.Message}");
+                Console.WriteLine($"error opening config file {e.Message}");
                 Environment.Exit(-1);
             }
             
@@ -38,9 +38,9 @@ namespace FtpSharp.Server
 
                 // bind succeed, start server
                 server.Start();
-            } catch (Exception)
+            } catch (Exception e)
             {
-                logger.LogInformation($"error start FtpSharp Server");
+                Console.WriteLine($"error start FtpSharp Server {e.Message}");
                 Environment.Exit(-1);
             }
         }

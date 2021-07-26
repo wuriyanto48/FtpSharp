@@ -20,7 +20,7 @@ namespace FtpSharp.Server.Command
             _logger.LogInformation("client send USER command");
             _logger.LogInformation($"{String.Join(",", args)}");
             var username = args[0];
-            username = MessageUtil.TrimCRLF(username);
+            MessageUtil.TrimCRLF(ref username);
 
             _clientObject.ReqUsername = username;
             byte[] data = MessageUtil.BuildReply(_clientObject, 331);

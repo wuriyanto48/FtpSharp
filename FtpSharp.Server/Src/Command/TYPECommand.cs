@@ -20,7 +20,8 @@ namespace FtpSharp.Server.Command
             _logger.LogInformation("client send TYPE command");
             _logger.LogInformation($"{String.Join(",", args)}");
             var dataType = args[0];
-            dataType = MessageUtil.TrimCRLF(dataType);
+            MessageUtil.TrimCRLF(ref dataType);
+
             if (dataType == "A")
             {
                 _clientObject.DataType = DataType.ASCII;

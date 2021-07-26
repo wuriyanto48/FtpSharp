@@ -21,11 +21,11 @@ namespace FtpSharp.Server.Command
         {
             _logger.LogInformation("client send STOR command");
 
-            var arg = args[0];
-            arg = MessageUtil.TrimCRLF(arg);
+            var arg = args[0]; 
+            MessageUtil.TrimCRLF(ref arg);
 
             Func<string, string> getFile = (string a) => {
-                var argParts = arg.Split('/');
+                var argParts = a.Split('/');
                 if (argParts.Length > 1)
                 {
                     return argParts[argParts.Length-1];

@@ -25,8 +25,8 @@ namespace FtpSharp.Server.Command
 
             if (args.Length > 0)
             {
-                var arg = args[0];
-                arg = MessageUtil.TrimCRLF(arg);
+                var arg = args[0]; 
+                MessageUtil.TrimCRLF(ref arg);
                 targetPath = Path.Join(_clientObject.RootDir, _clientObject.WorkDir, arg);
             } else
             {

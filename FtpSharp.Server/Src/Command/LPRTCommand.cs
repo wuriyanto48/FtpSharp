@@ -21,6 +21,14 @@ namespace FtpSharp.Server.Command
         {
             _logger.LogInformation("client send LPRT command");
             _logger.LogInformation($"{String.Join(",", args)}");
+
+            var arg = args[0]; 
+            MessageUtil.TrimCRLF(ref arg);
+
+            var dataParts = arg.Split(',');
+            var addressFamily = int.Parse(dataParts[0]);
+            var hostLength = int.Parse(dataParts[1]);
+
             byte[] data = MessageUtil.BuildReply(_clientObject, 200, "Connection estabilished");
             _clientObject.Write(data);
         }

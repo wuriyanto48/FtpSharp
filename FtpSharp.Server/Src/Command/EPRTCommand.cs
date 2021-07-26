@@ -21,8 +21,8 @@ namespace FtpSharp.Server.Command
         public void Process(string[] args)
         {
             _logger.LogInformation("client send EPRT command");
-            var arg = args[0];
-            arg = MessageUtil.TrimCRLF(arg);
+            var arg = args[0]; 
+            MessageUtil.TrimCRLF(ref arg);
             
             var separator = arg[0];
             var dataParts = arg.Split(separator);

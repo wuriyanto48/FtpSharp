@@ -10,12 +10,12 @@ namespace FtpSharp.Server
 
     public static class MessageUtil
     {
-        public static readonly byte[] CRLF = new byte[] {13, 10};
+        public static readonly byte[] CRLF = new byte[] {0xD, 0xA};
 
-        public static readonly byte[] LF = new byte[] {10};
+        public static readonly byte[] LF = new byte[] {0xA};
 
         // https://www.ibm.com/docs/en/xl-fortran-aix/16.1.0?topic=appendix-ascii-ebcdic-character-sets
-        public static readonly byte[] NAK = new byte[] {21};
+        public static readonly byte[] NAK = new byte[] {0x15};
 
         public static byte[] EOL(DataType dataType)
         {
@@ -49,8 +49,7 @@ namespace FtpSharp.Server
 
         public static string TrimCRLF(string input)
         {
-            char[] charToTrim = {'\r', '\n'};
-            var s = input.Trim(charToTrim);
+            var s = input.Trim(Encoding.ASCII.GetChars(CRLF));
             return s;
         }
     }

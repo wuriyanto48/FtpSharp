@@ -47,10 +47,9 @@ namespace FtpSharp.Server
             return byteData;
         }
 
-        public static string TrimCRLF(string input)
+        public static void TrimCRLF(ref string input)
         {
-            var s = input.Trim(Encoding.ASCII.GetChars(CRLF));
-            return s;
+            input = input.Trim(Encoding.ASCII.GetChars(CRLF));
         }
     }
 }
